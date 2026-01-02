@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ajakan Rahasia 🤡🧠</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    background:linear-gradient(135deg,#2196f3,#0d47a1);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:Arial, sans-serif;
+}
+.box{
+    background:white;
+    width:95%;
+    max-width:430px;
+    padding:22px;
+    border-radius:22px;
+    text-align:center;
+    box-shadow:0 25px 60px rgba(0,0,0,.35);
+}
+.emoji{font-size:64px}
+.text{
+    min-height:120px;
+    margin:14px 0;
+    font-size:16px;
+}
+button{
+    padding:12px 22px;
+    margin:6px;
+    border:none;
+    border-radius:25px;
+    cursor:pointer;
+    font-size:15px;
+}
+.ok{background:#673ab7;color:white}
+.no{background:#ff7043;color:white}
+input{
+    padding:11px;
+    width:80%;
+    border-radius:20px;
+    border:1px solid #ccc;
+}
+small{color:#777}
+</style>
+</head>
+
+<body>
+
+<audio id="music" loop autoplay>
+  <source src="DISARANKAN_DI_BANDUNG.mp3" type="audio/mpeg">
+</audio>
+
+<div class="box">
+    <div class="emoji">🤡🧠</div>
+    <div class="text" id="text"></div>
+    <div id="area"></div>
+    <small>🎵 Dongker – Disarankan di Bandung</small>
+</div>
+
+<script>
+const music = document.getElementById("music");
+const text = document.getElementById("text");
+const area = document.getElementById("area");
+
+let dialog = [
+"PERHATIAN, NOVIA.",
+"Ini bukan ajakan biasa.",
+"",
+"Sebelum lanjut...",
+"Kamu harus jawab TEKA-TEKI.",
+"",
+"Apa yang awalnya cuma chat,",
+"kalau diterusin terus,",
+"paling logis jadi apa?",
+"",
+"(1 kata. Jawaban menentukan nasib)"
+];
+
+let i=0,j=0;
+let musicOn=false;
+
+function type(){
+    if(j < dialog[i].length){
+        text.innerHTML += dialog[i][j++];
+        setTimeout(type,40);
+    }else{
+        setTimeout(()=>{
+            i++; j=0; text.innerHTML="";
+            if(i < dialog.length){
+                type();
+            }else{
+                area.innerHTML = `
+                <input id="ans" placeholder="Ketik jawaban">
+                <br>
+                <button class="ok" onclick="check()">Submit</button>
+                `;
+            }
+        },800);
+    }
+}
+
+function check(){
+    let a = document.getElementById("ans").value.toLowerCase().trim();
+    if(a === "ketemu"){
+        lanjut();
+    }else{
+        text.innerHTML="❌ SALAH.<br><br>Coba pikir pakai hati dan logika.";
+        area.innerHTML=`<button class="ok" onclick="reset()">Coba Lagi</button>`;
+    }
+}
+
+function reset(){
+    i=0;j=0;text.innerHTML="";area.innerHTML="";
+    type();
+}
+
+function lanjut(){
+    area.innerHTML="";
+    let lanjutDialog=[
+        "✅ BENAR, NOVIA.",
+        "Jawaban kamu valid.",
+        "",
+        "Sistem merekomendasikan:",
+        "Disarankan di Bandung.",
+        "",
+        "Pilih keputusan:"
+    ];
+    let x=0,y=0;
+    function next(){
+        if(y < lanjutDialog[x].length){
+            text.innerHTML += lanjutDialog[x][y++];
+            setTimeout(next,40);
+        }else{
+            if(lanjutDialog[x]==="Disarankan di Bandung." && !musicOn){
+                music.play().catch(()=>{});
+                musicOn=true;
+            }
+            setTimeout(()=>{
+                x++; y=0; text.innerHTML="";
+                if(x < lanjutDialog.length){
+                    next();
+                }else{
+                    area.innerHTML=`
+                    <button class="ok" onclick="final()">Gas Ketemu 😎</button>
+                    <button class="no" onmouseover="run(this)">Nanti Dulu 🙈</button>
+                    `;
+                }
+            },800);
+        }
+    }
+    next();
+}
+
+function final(){
+    text.innerHTML="KEPUTUSAN FIX.<br><br>Lokasi: Bandung<br>Waktu: Menyesuaikan<br><br>- Diaz -";
+    area.innerHTML="";
+}
+
+function run(b){
+    b.style.transform=`translate(${Math.random()*240-120}px,${Math.random()*240-120}px)`;
+}
+
+// aggressive autoplay fallback
+setTimeout(()=>{ music.play().catch(()=>{}); }, 500);
+document.addEventListener("click",()=>music.play().catch(()=>{}),{once:true});
+
+type();
+</script>
+
+</body>
+</html>
